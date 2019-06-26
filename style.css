@@ -1,0 +1,35 @@
+.container {
+    padding: 2px;
+    border: 1px solid black;
+    margin: 2em;
+    max-width: 600px;
+}
+
+.node {
+    position: relative;
+
+    padding: 0.5em;
+    border: 1px solid black;
+
+    transition: none;
+    -webkit-transition: none;
+    
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+.node:not(.drag) {
+    color: green;
+
+
+
+    /* transition: all 0.2s ease 0s;
+    -webkit-transition: all 0.2s ease 0s; */
+}
+
+.node.changes {
+    transition: all 0.2s ease 0s;
+    -webkit-transition: all 0.2s ease 0s; 
+}
