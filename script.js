@@ -178,6 +178,8 @@ const state = {};
 
 if (Array.prototype.equals)
     console.warn("Overriding existing Array.prototype.equals.");
+if (Array.prototype.mismatch)
+    console.warn("Overriding existing Array.prototype.mismatch.");
 
 Array.prototype.equals = function (array) {
     if (!array)
@@ -198,11 +200,6 @@ Array.prototype.equals = function (array) {
     return true;
 }
 
-Object.defineProperty(Array.prototype, "equals", { enumerable: false });
-
-if (Array.prototype.mismatch)
-    console.warn("Overriding existing Array.prototype.mismatch.");
-
 Array.prototype.mismatch = function (predicate) {
     for (var i = 1, l = this.length; i < l; i++) {
         if (predicate(this[i - 1], this[i]))
@@ -210,3 +207,7 @@ Array.prototype.mismatch = function (predicate) {
     }
     return -1;
 }
+
+
+Object.defineProperty(Array.prototype, "equals", { enumerable: false });
+Object.defineProperty(Array.prototype, "mismatch", { enumerable: false });
