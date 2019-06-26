@@ -29,6 +29,11 @@
     -webkit-transition: all 0.2s ease 0s; */
 }
 
+.node.drop {
+    transition: all 0.2s ease 0s;
+    -webkit-transition: all 0.2s ease 0s; 
+}
+
 .node.changes {
     transition: all 0.2s ease 0s;
     -webkit-transition: all 0.2s ease 0s; 

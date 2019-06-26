@@ -151,6 +151,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // rearrandeElements();
         elem.classList.remove('drag');
+        elem.classList.add('drop');
+        setTimeout(() => {
+            elem.classList.remove('drop');
+        }, 200);
+
 
         elem.style.left = 0;
         elem.style.top = 0;
