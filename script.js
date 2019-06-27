@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elem.classList.add('drop');
         setTimeout(() => {
             elem.classList.remove('drop');
-        }, 200);
+        }, 300);
 
 
         elem.style.left = 0;
