@@ -38,13 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    const rearrandeElements = (elem) => {
-        // const sortedList = Array.from(items).sort((a, b) => {
-        //     const a_y = a.getBoundingClientRect().y;
-        //     const b_y = b.getBoundingClientRect().y;
-        //     return a_y < b_y ? -1 : a_y > b_y ? 1 : 0;
-        // });
+    const checkIfElementsInOrder = () => {
+        const pos = Array.from(items).mismatch((a, b) => {
+            return a.id > b.id
+        });
+        const verdict = document.querySelector("#verdict");
 
+        if (pos === -1) {
+            verdict.innerHTML = "Initial Order";
+        } else {
+            verdict.innerHTML = "Not initial Order";
+        }
+    }
+    checkIfElementsInOrder();
+
+    const rearrandeElements = (elem) => {
         const pos = Array.from(items).mismatch((a, b) => {
             if (a.classList.contains("changes") || b.classList.contains("changes"))
                 return false;
@@ -55,24 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return aB.y + aB.height > bB.y + bB.height / 2;
         })
 
-        // console.log(pos);
-
         if (pos === -1) {
             return null;
         }
         else {
-            // let elem1, elem2;
-            // if (elem === items[pos]) {
-            //     elem1 = items[pos];
-            //     elem2 = items[pos + 1];
-            // } else {
-            //     elem1 = items[pos];
-            //     elem2 = items[pos + 1];
-            // }
-            // const elem1 = items[pos];
-            // cons
-
-            // console.log(elem1, elem2);
             let ret = {};
             if (elem === items[pos])
                 ret = {
@@ -91,22 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
             items = list.querySelectorAll(".node");
             return ret;
         }
-
-
-
-
-        // if (sortedList.equals(items))
-        //     return null;
-        // else {
-        //     const oldIndex = items.indexOf(elem);
-        //     const newIndex = sortedList.indexOf(elem);
-        //     items = sortedList;
-
-        //     for (let item of items)
-        //         list.appendChild(item);
-
-        //     return newIndex - oldIndex;
-        // }
     }
 
     const redoY = (elem, e) => {
@@ -121,6 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const changes = rearrandeElements(elem);
         if (changes !== null) {
+            checkIfElementsInOrder();
+
             state.add += changes.dir;
 
             redoY(elem, e);
