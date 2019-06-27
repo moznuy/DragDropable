@@ -1,8 +1,14 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const list = document.querySelector(".container");
-    let items = list.querySelectorAll(".node");
-    const height = items[0].getBoundingClientRect().height;
+const list = document.querySelector(".container");
+let items = [];
 
+const populateItems = () => {
+    items = Array.from(list.querySelectorAll(".node"));
+}
+
+populateItems();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const height = items[0].getBoundingClientRect().height;
 
     document.addEventListener("mousedown", e => {
         const { srcElement: elem } = e;
@@ -25,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("mousemove", e => {
         if (state.elem)
             onDrag(state.elem, e);
+        //setTimeout(() => onDrag(state.elem, e), 0);
     });
 
     const fillDelta = e => {
@@ -52,17 +59,55 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     checkIfElementsInOrder();
 
+    /**
+     * 
+     * @param {Array} elem 
+     */
     const rearrandeElements = (elem) => {
-        const pos = Array.from(items).mismatch((a, b) => {
-            if (a.classList.contains("changes") || b.classList.contains("changes"))
-                return false;
+        // // const p = items.indexOf(elem);
+        // // const lp = Math.max(0, p - 20);
+        // // const rp = Math.min(items.length, p + 20);
+        // // const smaller_items = items.slice(lp, rp);
 
-            const aB = a.getBoundingClientRect();
-            const bB = b.getBoundingClientRect();
+        const oldLogic = () => {
+            const pos = Array.from(items).mismatch((a, b) => {
+                if (a.classList.contains("changes") || b.classList.contains("changes"))
+                    return false;
 
-            return aB.y + aB.height > bB.y + bB.height / 2;
-        })
+                const aB = a.getBoundingClientRect();
+                const bB = b.getBoundingClientRect();
 
+                return aB.y + aB.height > bB.y + bB.height / 2;
+            })
+
+            return pos;
+        }
+
+        const newLogic = () => {
+            const pos = items.map(item => {
+                return !item.classList.contains("changes") ? item.getBoundingClientRect() : null;
+            }).mismatch((a, b) => {
+                if (a === null || b === null)
+                    return false;
+                return a.y + a.height > b.y + b.height / 2;
+            })
+
+            return pos;
+        }
+
+        const res1 = oldLogic();
+        const res2 = newLogic();
+        const pos = res2;
+        // if (res1 === null && res2 === null) {
+        //     return null;
+        // }
+        // if (res1 === null && res2 !== null) {
+        //     console.log("WTF", res1, res2);
+        //     return null;
+        // }
+        // if (res1 !== null && res2 === null) {
+        //     console.log("WTF2", res1, res2);
+        // }
         if (pos === -1) {
             return null;
         }
@@ -79,21 +124,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     dir: -1
                 }
 
-
             list.insertBefore(items[pos + 1], items[pos]);
 
-            items = list.querySelectorAll(".node");
+            populateItems();
             return ret;
         }
     }
 
+
     const redoY = (elem, e) => {
-        fillDelta(e);
+        if (elem !== null && e !== null) {
+            fillDelta(e);
 
-        elem.style.left = state.delta.x + "px";
-        elem.style.top = state.delta.y + "px";
+            elem.style.left = state.delta.x + "px";
+            elem.style.top = state.delta.y + "px";
+        }
     }
-
     const onDrag = (elem, e) => {
         redoY(elem, e);
 
@@ -125,6 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         state.add = 0;
         elem.classList.add('drag');
+        // state.int = setInterval(() => {
+        //     onDrag(state.elem, null);
+        // }, 20);
     };
     const onDragEnd = (elem, e) => {
         fillDelta(e);
@@ -157,6 +206,24 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const state = {};
+
+if (false) {
+    Papa.parse("world_cities.csv", {
+        download: true,
+        complete: function (results) {
+            const newElemements = results.data.map((row, i) => {
+                const elem = document.createElement("div");
+                elem.id = 'm' + i;
+                elem.classList.add("node");
+                elem.innerText = `${row[0]} ${row[2]} ${row[1]}`;
+                return elem;
+            })
+
+            list.append(...newElemements);
+            populateItems();
+        }
+    });
+}
 
 
 if (Array.prototype.equals)
