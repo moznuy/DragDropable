@@ -150,7 +150,10 @@ document.addEventListener("DOMContentLoaded", () => {
         fillDelta(e);
 
         // rearrandeElements();
-        elem.classList.remove('drag');
+        setTimeout(() => {
+            elem.classList.remove('drag');
+        }, 100);
+        // elem.classList.remove('drag');
         elem.classList.add('drop');
         setTimeout(() => {
             elem.classList.remove('drop');

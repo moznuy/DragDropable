@@ -29,12 +29,19 @@
     -webkit-transition: all 0.2s ease 0s; */
 }
 
-.node.drop {
+.node.drag {
+    border-radius: 5px;
+    box-shadow: 0px 5px 6px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    z-index: 1;
+}
+
+.node.drop,.node.changes {
     transition: all 0.2s ease 0s;
     -webkit-transition: all 0.2s ease 0s; 
 }
 
-.node.changes {
+ {
     transition: all 0.2s ease 0s;
     -webkit-transition: all 0.2s ease 0s; 
 }
